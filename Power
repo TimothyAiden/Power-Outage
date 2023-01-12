@@ -1,0 +1,30 @@
+import datetime
+import requests
+
+# Function to check for power outages in Nigeria
+def check_power_outages():
+    # Get current date and time
+    now = datetime.datetime.now()
+    # Make a request to the power outage API
+    response = requests.get("https://example.com/power-outages/nigeria")
+    # Check if the response is successful
+    if response.status_code == 200:
+        # Parse the response data
+        data = response.json()
+        # Check if there are any reported outages in Nigeria
+        if data["nigeria"]["status"] == "OUTAGE":
+            # Get the start and end times of the outage
+            start_time = datetime.datetime.strptime(data["nigeria"]["start_time"], "%Y-%m-%d %H:%M:%S")
+            end_time = datetime.datetime.strptime(data["nigeria"]["end_time"], "%Y-%m-%d %H:%M:%S")
+            # Check if the current time is within the outage window
+            if start_time <= now <= end_time:
+                print("There is currently a power outage in Nigeria.")
+            else:
+                print("There is no power outage in Nigeria at the moment.")
+        else:
+            print("There is no power outage in Nigeria at the moment.")
+    else:
+        print("Failed to retrieve power outage data.")
+
+# Call the function
+check_power_outages()
